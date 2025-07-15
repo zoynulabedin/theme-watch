@@ -3,11 +3,12 @@
 client_id = "5b031be0ee45d55c4bc2a867ea35596f"
 name = "theme-watch"
 handle = "theme-watch-2"
-application_url = "https://example.com/"
+application_url = "https://lotus-occupational-slovenia-customs.trycloudflare.com"
 embedded = true
 
 [build]
 include_config_on_deploy = true
+automatically_update_urls_on_dev = true
 
 [webhooks]
 api_version = "2025-07"
@@ -22,10 +23,11 @@ api_version = "2025-07"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "write_products"
 
+
+scopes = "write_products,read_themes,write_themes"
 [auth]
-redirect_urls = [ "https://example.com/api/auth" ]
+redirect_urls = ["https://lotus-occupational-slovenia-customs.trycloudflare.com/auth/callback", "https://lotus-occupational-slovenia-customs.trycloudflare.com/auth/shopify/callback", "https://lotus-occupational-slovenia-customs.trycloudflare.com/api/auth/callback"]
 
 [pos]
 embedded = false

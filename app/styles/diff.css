@@ -1,0 +1,15 @@
+.diff-viewer {
+  max-height: 500px;
+  overflow-y: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+}
+
+.diff-viewer > div {
+  padding: 0.5rem;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.diff-viewer > div:last-child {
+  border-bottom: none;
+}
