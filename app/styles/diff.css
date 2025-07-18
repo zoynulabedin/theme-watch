@@ -13,3 +13,50 @@
 .diff-viewer > div:last-child {
   border-bottom: none;
 }
+
+.diff-line-delete,
+.monaco-diff-editor .content-change.line-delete {
+  background-color: rgba(255, 0, 0, 0.1) !important;
+}
+
+.diff-line-add,
+.monaco-diff-editor .content-change.line-insert {
+  background-color: rgba(0, 255, 0, 0.1) !important;
+}
+
+.diff-gutter-delete,
+.monaco-diff-editor .line-delete {
+  background-color: rgba(255, 0, 0, 0.2) !important;
+}
+
+.diff-gutter-add,
+.monaco-diff-editor .line-insert {
+  background-color: rgba(0, 255, 0, 0.2) !important;
+}
+
+.monaco-editor .line-delete,
+.monaco-editor .line-insert {
+  position: relative;
+}
+
+.monaco-editor .margin-view-overlays .line-delete::before,
+.monaco-editor .margin-view-overlays .line-insert::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 3px;
+  height: 100%;
+}
+
+.monaco-editor .margin-view-overlays .line-delete::before {
+  background-color: rgba(255, 0, 0, 0.5);
+}
+
+.monaco-editor .margin-view-overlays .line-insert::before {
+  background-color: rgba(0, 255, 0, 0.5);
+}
+
+.diff-editor-container .monaco-editor .margin,
+.monaco-diff-editor .margin {
+  background-color: #f6f8fa;
+}

@@ -3,7 +3,7 @@
 client_id = "5b031be0ee45d55c4bc2a867ea35596f"
 name = "theme-watch"
 handle = "theme-watch-2"
-application_url = "https://lotus-occupational-slovenia-customs.trycloudflare.com"
+application_url = "https://weekend-mechanism-effective-expected.trycloudflare.com"
 embedded = true
 
 [build]
@@ -27,7 +27,7 @@ api_version = "2025-07"
 
 scopes = "write_products,read_themes,write_themes"
 [auth]
-redirect_urls = ["https://lotus-occupational-slovenia-customs.trycloudflare.com/auth/callback", "https://lotus-occupational-slovenia-customs.trycloudflare.com/auth/shopify/callback", "https://lotus-occupational-slovenia-customs.trycloudflare.com/api/auth/callback"]
+redirect_urls = ["https://weekend-mechanism-effective-expected.trycloudflare.com/auth/callback", "https://weekend-mechanism-effective-expected.trycloudflare.com/auth/shopify/callback", "https://weekend-mechanism-effective-expected.trycloudflare.com/api/auth/callback"]
 
 [pos]
 embedded = false

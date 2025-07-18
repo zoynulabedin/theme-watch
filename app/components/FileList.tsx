@@ -26,7 +26,7 @@ export default function FileList({
 
   return (
     <Card>
-      <div style={{ maxHeight: "35vh", overflowY: "auto" }}>
+      <div style={{ maxHeight: "50vh", overflowY: "auto" }}>
         {files.length > 0 ? (
           <ResourceList
             resourceName={{ singular: "file", plural: "files" }}

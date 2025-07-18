@@ -5,9 +5,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// Note that some adapters may set a maximum length for the String type by default, please ensure your strings are long
-// enough when changing adapters.
-// See https://www.prisma.io/docs/orm/reference/prisma-schema-reference#string for more information
 datasource db {
   provider = "sqlite"
   url      = "file:dev.sqlite"
@@ -29,4 +26,39 @@ model Session {
   locale        String?
   collaborator  Boolean?  @default(false)
   emailVerified Boolean?  @default(false)
+}
+
+model ThemeComparison {
+  id            String     @id @default(uuid())
+  shop          String
+  title         String
+  sourceThemeId String
+  sourceTheme   ThemeInfo  @relation("SourceTheme", fields: [sourceThemeId], references: [id])
+  targetThemeId String
+  targetTheme   ThemeInfo  @relation("TargetTheme", fields: [targetThemeId], references: [id])
+  createdAt     DateTime   @default(now())
+  differences   Int        @default(0)
+  files         String    
+  diffContents  String     
+  results       ComparisonResult[]
+}
+
+model ComparisonResult {
+  id                String          @id @default(uuid())
+  comparisonId     String
+  comparison       ThemeComparison  @relation(fields: [comparisonId], references: [id])
+  fileName         String
+  sourceContent    String          // Content from source theme
+  targetContent    String          // Content from target theme
+  createdAt        DateTime        @default(now())
+}
+
+
+// Theme information as a separate model for SQLite compatibility
+model ThemeInfo {
+  id            String             @id @default(uuid())
+  name          String
+  role          String?
+  sourceOf      ThemeComparison[]  @relation("SourceTheme")
+  targetOf      ThemeComparison[]  @relation("TargetTheme")
 }

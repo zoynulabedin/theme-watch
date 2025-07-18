@@ -4,21 +4,16 @@ import {
   Text,
   Box,
   Button,
-  Checkbox,
   BlockStack,
   Select,
+  Spinner,
+  Banner,
 } from "@shopify/polaris";
-
-interface Theme {
-  id: string;
-  name: string;
-  date: string;
-  description?: string;
-}
+import type { Theme } from "../types/theme";
 
 interface ThemeSelectorProps {
   selectedTheme: Theme | null;
-  onSelect: (theme: Theme) => void;
+  onSelect: (theme: Theme | null) => void;
   type: "source" | "target";
 }
 
@@ -28,25 +23,29 @@ export default function ThemeSelector({
   type,
 }: ThemeSelectorProps) {
   const [themes, setThemes] = useState<Theme[]>([]);
-  const [checked, setChecked] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [selected, setSelected] = useState<string>("");
 
   useEffect(() => {
     const fetchThemes = async () => {
-      const res = await fetch(`/api/themes?type=${type}`);
-      let themes = await res.json();
-      themes = themes.map((theme: Theme) => ({
-        ...theme,
-        description: theme.description || "",
-      }));
-      setThemes(themes);
-      // Only auto-select if none is selected and not the placeholder
-      if (
-        themes.length > 0 &&
-        (!selected ||
-          !(themes as Theme[]).some((t: Theme) => t.id === selected))
-      ) {
-        setSelected(""); // Ensure placeholder is selected by default
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await fetch(`/api/themes?type=${type}`);
+        if (!res.ok) {
+          throw new Error(`Failed to fetch themes: ${res.statusText}`);
+        }
+        const themes = await res.json();
+        setThemes(themes);
+
+        if (themes.length > 0 && !selected) {
+          setSelected("");
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to load themes");
+      } finally {
+        setLoading(false);
       }
     };
     fetchThemes();
@@ -54,15 +53,23 @@ export default function ThemeSelector({
 
   const handleSelectChange = (value: string) => {
     setSelected(value);
-    const theme = themes.find((t: Theme) => t.id === value);
-    if (theme) onSelect(theme);
-    // If placeholder is selected, clear selection
-    if (value === "") onSelect(null as any);
+    const theme = themes.find((t) => t.id === value);
+    if (theme) {
+      onSelect(theme);
+    } else {
+      onSelect(null);
+    }
   };
 
   return (
     <Card>
-      <BlockStack>
+      <BlockStack gap="400">
+        {error && (
+          <Banner tone="critical">
+            <p>{error}</p>
+          </Banner>
+        )}
+
         <Select
           label={type === "source" ? "Source Theme" : "Target Theme"}
           options={[
@@ -74,8 +81,16 @@ export default function ThemeSelector({
           ]}
           onChange={handleSelectChange}
           value={selected}
+          disabled={loading}
         />
-        {selectedTheme && (
+
+        {loading && (
+          <Box paddingBlock="400">
+            <Spinner size="small" />
+          </Box>
+        )}
+
+        {selectedTheme && !loading && (
           <Box paddingBlock="200">
             <Text variant="bodySm" tone="subdued" as="span">
               Created At: {selectedTheme.date}
@@ -86,9 +101,18 @@ export default function ThemeSelector({
               </Text>
             )}
             <Box paddingBlock="200">
+              {" "}
               <Button
                 variant="plain"
-                onClick={() => window.open(selectedTheme.id, "_blank")}
+                onClick={() => {
+                  // Extract numeric theme ID from GraphQL GID
+                  const themeId = selectedTheme.id.split("/").pop();
+                  // Open theme editor in Shopify admin
+                  window.open(
+                    `https://admin.shopify.com/themes/${themeId}/editor`,
+                    "_blank",
+                  );
+                }}
               >
                 View Theme
               </Button>
